@@ -72,30 +72,8 @@ Progress is printed to the console: ✔ — saved, ⚠️ — invoice not found,
 
 ---
 
-## 6. Automation (cron/launchd)
 
-Example cron job (2nd day of each month at 06:00):
-
-```cron
-0 6 2 * *  cd /Users/you/projects/stripe-dl && source .venv/bin/activate && python download_invoices.py >> cron.log 2>&1
-```
-
-1. **Create/insert the key** before running.  
-2. **Delete/revoke the key** after export.
-
----
-
-## 7. FAQ
-
-| Question | Answer |
-|----------|--------|
-| The script says "payment without invoice" | The payment only has a receipt (`receipt_url`) — no invoice was created. |
-| How to download receipts? | Extend the script: take `receipt_url` and convert to PDF using a headless browser. |
-| What about Search API? | Not used. Charge ↔ Invoice link is determined via Invoice Payment API (2025-03-31+) or `payment_intent.invoice`. |
-
----
-
-## 8. Stripe API version update
+## 6. Stripe API version update
 
 The script is compatible with versions **up to** 2025-03-31 and newer.  
 To support future changes, update the `stripe` package:
