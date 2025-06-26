@@ -1,13 +1,13 @@
-# виртуальное окружение
+# virtual environment
 .venv/
 
-# секреты
+# secrets
 .env
 
-# скачанные PDF
+# downloaded PDFs
 invoices/
 
-# кэш / метаданные IDE
+# IDE cache / metadata
 __pycache__/
 .idea/
 .vscode/

@@ -1,57 +1,57 @@
 # Stripe Invoice Downloader
 
-Скрипт `download_invoices.py` автоматически сохраняет PDF‑инвойсы по списку **Invoice / Charge / PaymentIntent** ID. Подходит для macOS, Linux и Windows.
+The script `download_invoices.py` automatically saves PDF invoices by a list of **Invoice / Charge / PaymentIntent** IDs. Works on macOS, Linux, and Windows.
 
 ---
 
-## 1. Что делает скрипт
+## 1. What the script does
 
-* Читает файл `invoice_ids.csv` (по одному ID в строке). Поддерживаются:
+* Reads the file `invoice_ids.csv` (one ID per line). Supported:
   * `in_…` — Invoice ID
   * `ch_…`, `py_…` — Charge ID
   * `pi_…` — PaymentIntent ID
-* Для каждого ID определяет, где лежит счёт, и скачивает `invoice_pdf`.
-* Сохраняет файлы в папку **`invoices/`** как `in_XXXXXXXX.pdf`.
+* For each ID, determines where the invoice is and downloads the `invoice_pdf`.
+* Saves files to the **`invoices/`** folder as `in_XXXXXXXX.pdf`.
 
 ---
 
-## 2. Требования
+## 2. Requirements
 
-* **Python 3.8+**
-* Пакеты: `stripe`, `requests`, `python-dotenv`
-* Stripe API‑ключ c правами **Invoices → Read, Charges → Read, Payment Intents → Read**.
+* **Python 3.8+**
+* Packages: `stripe`, `requests`, `python-dotenv`
+* Stripe API key with **Invoices → Read, Charges → Read, Payment Intents → Read** permissions.
 
 ---
 
-## 3. Установка
+## 3. Installation
 
 ```bash
-# 1. Клонируйте репозиторий или положите скрипт в отдельную папку
+# 1. Clone the repository or place the script in a separate folder
 cd ~/projects/stripe-dl
 
-# 2. Создайте виртуальное окружение
+# 2. Create a virtual environment
 python3 -m venv .venv
 source .venv/bin/activate
 
-# 3. Установите зависимости
+# 3. Install dependencies
 pip install stripe requests python-dotenv
 ```
 
 ---
 
-## 4. Настройка
+## 4. Setup
 
-1. **API‑ключ**  
-   В корне проекта создайте файл `.env`:
+1. **API key**  
+   In the project root, create a `.env` file:
 
    ```env
    STRIPE_SECRET_KEY=rk_live_xxxxxxxxxxxxxxxxxxxx
    ```
 
-   Ограничьте права ключа (Invoices/Charges/PaymentIntents → Read) и удаляйте после выгрузки.
+   Restrict the key's permissions (Invoices/Charges/PaymentIntents → Read) and delete it after export.
 
-2. **Список ID**  
-   Файл `invoice_ids.csv`, формат:
+2. **ID list**  
+   The file `invoice_ids.csv`, format:
 
    ```
    ch_3RJtDGBkBGkwtT0Q1VZTeGkO
@@ -61,49 +61,47 @@ pip install stripe requests python-dotenv
 
 ---
 
-## 5. Запуск
+## 5. Usage
 
 ```bash
-source .venv/bin/activate      # если окружение ещё не активно
-python download_invoices.py    # PDF‑ы появятся в ./invoices/
+source .venv/bin/activate      # if the environment is not yet active
+python download_invoices.py    # PDFs will appear in ./invoices/
 ```
 
-Прогресс выводится в консоль: ✔ — сохранено, ⚠️ — счёт не найден, ❌ — ошибка.
+Progress is printed to the console: ✔ — saved, ⚠️ — invoice not found, ❌ — error.
 
 ---
 
-## 6. Автоматизация (cron/launchd)
+## 6. Automation (cron/launchd)
 
-Пример cron‑задания (2‑го числа каждого месяца в 06:00):
+Example cron job (2nd day of each month at 06:00):
 
 ```cron
 0 6 2 * *  cd /Users/you/projects/stripe-dl && source .venv/bin/activate && python download_invoices.py >> cron.log 2>&1
 ```
 
-1. **Создать/вставить ключ** перед запуском.  
-2. **Удалить/отозвать ключ** после выгрузки.
+1. **Create/insert the key** before running.  
+2. **Delete/revoke the key** after export.
 
 ---
 
 ## 7. FAQ
 
-| Вопрос | Ответ |
-|--------|-------|
-| Скрипт пишет «платёж без invoice» | Платёж имеет только чек (`receipt_url`) — счёт не создавался. |
-| Как скачать receipts? | Дополнить скрипт: брать `receipt_url` и конвертировать в PDF headless‑браузером. |
-| Что с Search API? | Не используется. Связь Charge ⇄ Invoice определяется через Invoice Payment API (2025‑03‑31+) или `payment_intent.invoice`. |
+| Question | Answer |
+|----------|--------|
+| The script says "payment without invoice" | The payment only has a receipt (`receipt_url`) — no invoice was created. |
+| How to download receipts? | Extend the script: take `receipt_url` and convert to PDF using a headless browser. |
+| What about Search API? | Not used. Charge ↔ Invoice link is determined via Invoice Payment API (2025-03-31+) or `payment_intent.invoice`. |
 
 ---
 
-## 8. Обновление Stripe API‑версии
+## 8. Stripe API version update
 
-Скрипт совместим с версиями **до** 2025‑03‑31 и новее.  
-Для поддержки будущих изменений обновляйте пакет `stripe`:
+The script is compatible with versions **up to** 2025-03-31 and newer.  
+To support future changes, update the `stripe` package:
 
 ```bash
 pip install --upgrade stripe
 ```
 
----
 
-MIT License © 2025 Subsquid Labs GmbH
