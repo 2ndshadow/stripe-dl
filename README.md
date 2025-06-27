@@ -48,7 +48,7 @@ pip install stripe requests python-dotenv
    STRIPE_SECRET_KEY=rk_live_xxxxxxxxxxxxxxxxxxxx
    ```
 
-   Restrict the key's permissions (Invoices/Charges/PaymentIntents → Read) and delete it after export.
+   Restrict the key's permissions (Invoices/Charges/PaymentIntents → Read).
 
 2. **ID list**  
    The file `invoice_ids.csv`, format:
